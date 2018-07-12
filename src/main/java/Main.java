@@ -47,7 +47,7 @@ public class Main {
 
             Elements elements1 = doc3.select(".productPrices");
             Elements elements2 = doc3.select(".priceStyles__strike--PSBGK");
-            Elements elements0 = doc3.select(".styles__campaignBadgeText--z4YFj"); //скадка
+           // Elements elements0 = doc3.select(".styles__campaignBadgeText--z4YFj"); //скадка
             Elements elements3 = doc3.select("h1"); //бренд
             Elements elements4 = doc3.select(".styles__title--UFKYd");
             Elements elements5 = doc3.select(".styles__title--3Jos_");
@@ -60,7 +60,7 @@ public class Main {
             String c = cleanHTML(
                     "Стоимость со скидкой: " + elements1.text() + "---"
                             + "Предыдущая цена: " + elements2.text() + "---"
-                            + "Скидка: " + discountCleaner(elements0.text()) + "---"
+                           // + "Скидка: " + discountCleaner(elements0.text()) + "---"
                             + "Бренд: " + brandCleaner(elements3.text()) + "---"
                             + "Цвет: " + elements4.text() + "---"
                             + "Название товара: " + elements5.text() + "---"
