@@ -10,17 +10,15 @@ import java.util.List;
 
 public class Parser  {
 
-  public synchronized void parser (String brand){
+  public synchronized void parser (String brand, int quantityPage){
       final String URL = "https://www.aboutyou.de/about/brand/" + brand + "?category=20201&sort=topseller&page=1";
       int httpRequests = 0;
       int numberPage = 1;
       long startTime = System.nanoTime();
 
-
-
-        for (int i = 1; i <= 1; i++) {
+        for (int i = 1; i <=quantityPage; i++) {
         String url1 = URL + i;
-        System.out.println("new page**************************************************************************" + " Page Namber " + numberPage++);
+        System.out.println("NEW PAGE **************************************************************************" + " Page Namber " + numberPage++);
 
         Document doc = null;
         try {
@@ -70,26 +68,28 @@ public class Parser  {
                 offers.add(offer);
                 offers.forEach(System.out::println);
 
+                XMLView xmlView = new XMLView();
+                xmlView.update(offers);
+
                 if (httpRequests % 5 == 0) {
-                    System.out.println("Sleep for 5 sec");
+                    System.out.println("Sleeping for 2 sec");
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-            }
-
+        }
         }
         long runTime = (System.nanoTime() - startTime) / 10000000;
         System.out.println("Run-time = " + runTime / 100 + " sec");
         System.out.println("Amount of triggered HTTP request " + httpRequests);
         System.out.println("Amount of page " + numberPage);
-        //System.out.println ("Amount of extracted products: " + offers.getList().size() + ".");
         System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
     }
-}
 
+
+}
 
     private static String cleanHTML(String html) {
         return html
