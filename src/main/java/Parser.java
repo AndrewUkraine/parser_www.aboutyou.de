@@ -11,7 +11,15 @@ import java.util.List;
 public class Parser  {
 
   public synchronized void parser (String brand, int quantityPage){
-      final String URL = "https://www.aboutyou.de/about/brand/" + brand + "?category=20201&sort=topseller&page=1";
+      int cat = 138113;
+      int[] categories = new int[]{138113, 20201, 20202};
+      for (int category : categories) {
+      final String URL = "https://www.aboutyou.de/suche?" + "term=" + brand.replaceAll(" ", "+") + "&category=" + category + "&page=";
+      //https://www.aboutyou.de/about/brand/nike?category=138113
+     // https://www.aboutyou.de/about/brand/nike?category=138113&sort=topseller
+     // https://www.aboutyou.de/about/brand/nike?category=138113&sort=topseller&page=2
+      // https://www.aboutyou.de/about/brand/nike?category=138113&page=2  - 0k работает
+
       int httpRequests = 0;
       int numberPage = 1;
       long startTime = System.nanoTime();
@@ -90,6 +98,7 @@ public class Parser  {
 
 
 }
+  }
 
     private static String cleanHTML(String html) {
         return html
