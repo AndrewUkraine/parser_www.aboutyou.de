@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import sun.awt.windows.ThemeReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,15 +28,11 @@ public class Main {
         long startTime = System.nanoTime();
         String brand = sc.nextLine();
 
-        Thread thread = new Thread();
 
-
-        String url = "https://www.aboutyou.de/about/brand/" +brand + "?category=20201&sort=topseller&page=1";
+        String url = "https://www.aboutyou.de/about/brand/" + brand + "?category=20201&sort=topseller&page=1";
 
         for (int i = 1; i < 3; i++) {
-
             String url1 = url + i;
-
             System.out.println("new page**************************************************************************" + " Page Namber " + namberPage++);
 
             Document doc = null;
@@ -63,7 +60,7 @@ public class Main {
 
                 httpRequests++;
 
-Offers offers = new Offers();
+                Offers offers = new Offers();
 
                 String c = cleanHTML(
 
@@ -79,16 +76,25 @@ Offers offers = new Offers();
 
 
                 System.out.println(c);
-            }
 
-        }
+                if (httpRequests % 5 == 0){
+                    System.out.println("Sleep for 5 sec");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
             long runTime = (System.nanoTime() - startTime) / 10000000;
             System.out.println("Run-time = " + runTime / 100 + " sec");
             System.out.println("Amount of triggered HTTP request " + httpRequests);
-        System.out.println("Amount of page " + namberPage);
+            System.out.println("Amount of page " + namberPage);
             //System.out.println ("Amount of extracted products: " + offers.getList().size() + ".");
             // System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
         }
+    }
 
 
     private static String cleanHTML(String html) {
