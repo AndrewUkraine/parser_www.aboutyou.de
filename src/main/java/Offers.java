@@ -12,4 +12,11 @@ public class Offers {
     public void setOfferList(List<Offer> offerList) {
         this.offerList = offerList;
     }
+
+    @Override
+    public String toString() {
+        return "Offers{" +
+                "offerList=" + offerList +
+                '}';
+    }
 }

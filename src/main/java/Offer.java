@@ -120,4 +120,18 @@ public class Offer {
     public void setShippingCosts(String shippingCosts) {
         this.shippingCosts = shippingCosts;
     }
+
+    @Override
+    public String toString() {
+        return "Offer{" +
+                "name='" + name + '\'' +
+                ", brand='" + brand + '\'' +
+                ", color='" + color + '\'' +
+                ", price='" + price + '\'' +
+                ", initialPrice='" + initialPrice + '\'' +
+                ", description='" + description + '\'' +
+                ", articleId='" + articleId + '\'' +
+                ", shippingCosts='" + shippingCosts + '\'' +
+                '}';
+    }
 }
