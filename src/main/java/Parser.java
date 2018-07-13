@@ -37,7 +37,15 @@ public class Parser  {
 
         Elements elements = null;
         if (doc != null) {
-            elements = doc.select("html body main#app section.styles__layout--1QK8W.styles__stretchLayout--3omnx div div.styles__container--2cj5w div.row div.col-sm-9.col-md-10 div div div.styles__container--1bqmB div.row div.styles__container--1bqmB div.styles__tile--2s8XN.col-sm-6.col-md-4.col-lg-4 div a");
+           // elements = doc.select("html body main#app section.styles__layout--1QK8W.styles__stretchLayout--3omnx div div.styles__container--2cj5w div.row div.col-sm-9.col-md-10 div div div.styles__container--1bqmB div.row div.styles__container--1bqmB div.styles__tile--2s8XN.col-sm-6.col-md-4.col-lg-4 div a");
+
+            elements = doc.select("a.href");
+
+           /* if (URL.indexOf("/p/") == 0) {
+                URL.add("https://www.aboutyou.de" + url);*/
+
+
+
         }
         if (elements != null) {
             for (Element element : elements) {
