@@ -38,13 +38,14 @@ public class Parser  {
         Elements elements;
 
            // elements = doc.select("html body main#app section.styles__layout--1QK8W.styles__stretchLayout--3omnx div div.styles__container--2cj5w div.row div.col-sm-9.col-md-10 div div div.styles__container--1bqmB div.row div.styles__container--1bqmB div.styles__tile--2s8XN.col-sm-6.col-md-4.col-lg-4 div a");
-            elements =  doc.body().getElementsByClass("styles__tile--2s8XN").first().getElementsByAttribute("href");
+            elements =  doc.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
+
 
 
             for (Element element : elements) {
                 String url = element.attr("href");
 
-                //if (url.indexOf("/p/") != 0) {
+                if (url.contains("/p/")) {
 
                     String url3 = "https://www.aboutyou.de" + url;
 
@@ -93,6 +94,7 @@ public class Parser  {
                         }
                     }
                 }
+            }
         }
 
         long runTime = (System.nanoTime() - startTime) / 10000000;
@@ -120,6 +122,8 @@ public class Parser  {
     }
 
     private static String brandCleaner(String a) {
-        return a.substring(0, a.indexOf("|"));
+      if (a.length()!=0){
+        return a.substring(0, a.indexOf("|"));}
+        else return null;
     }
 }
