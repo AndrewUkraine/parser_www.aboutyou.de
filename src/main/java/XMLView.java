@@ -12,7 +12,6 @@ public class XMLView {
         try {
             Offers offers1 = new Offers();
             offers1.setOfferList(offers);
-
             File file = new File(filePath);
             JAXBContext jaxbContext = JAXBContext.newInstance(Offers.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();

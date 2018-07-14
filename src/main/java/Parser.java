@@ -10,15 +10,13 @@ import java.util.List;
 
 public class Parser  {
 
-  public synchronized void parser (String brand, int quantityPage){
-      int cat = 138113;
+  public  synchronized List<Offer> parser (String brand, int quantityPage){
+
+      List<Offer> offers = new ArrayList<>();
+
       int[] categories = new int[]{138113, 20201, 20202};
       for (int category : categories) {
       final String URL = "https://www.aboutyou.de/suche?" + "term=" + brand.replaceAll(" ", "+") + "&category=" + category + "&page=";
-      //https://www.aboutyou.de/about/brand/nike?category=138113
-     // https://www.aboutyou.de/about/brand/nike?category=138113&sort=topseller
-     // https://www.aboutyou.de/about/brand/nike?category=138113&sort=topseller&page=2
-      // https://www.aboutyou.de/about/brand/nike?category=138113&page=2  - 0k работает
 
       int httpRequests = 0;
       int numberPage = 1;
@@ -26,7 +24,7 @@ public class Parser  {
 
         for (int i = 1; i <=quantityPage; i++) {
         String url1 = URL + i;
-        System.out.println("NEW PAGE **************************************************************************" + " Page Namber " + numberPage++);
+      
 
         Document doc = null;
         try {
@@ -36,17 +34,11 @@ public class Parser  {
         }
 
         Elements elements;
-
-           // elements = doc.select("html body main#app section.styles__layout--1QK8W.styles__stretchLayout--3omnx div div.styles__container--2cj5w div.row div.col-sm-9.col-md-10 div div div.styles__container--1bqmB div.row div.styles__container--1bqmB div.styles__tile--2s8XN.col-sm-6.col-md-4.col-lg-4 div a");
             elements =  doc.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
-
-
-
             for (Element element : elements) {
                 String url = element.attr("href");
 
                 if (url.contains("/p/")) {
-
                     String url3 = "https://www.aboutyou.de" + url;
 
                     Document doc3 = null;
@@ -66,10 +58,7 @@ public class Parser  {
 
                     httpRequests++;
 
-                    List<Offer> offers = new ArrayList<>();
-
                     Offer offer = new Offer();
-
                     offer.setName(cleanHTML(elements5.text()));
                     offer.setBrand(cleanHTML(brandCleaner(elements3.text())));
                     offer.setColor(cleanHTML(elements4.text()));
@@ -78,15 +67,9 @@ public class Parser  {
                     offer.setDescription(cleanHTML(elements7.text()));
                     offer.setArticleId(cleanHTML(elements6.text()));
                     offer.setShippingCosts(cleanHTML(elements8.text()));
-
                     offers.add(offer);
-                    offers.forEach(System.out::println);
-
-                    XMLView xmlView = new XMLView();
-                    xmlView.update(offers);
 
                     if (httpRequests % 5 == 0) {
-                        System.out.println("Sleeping for 2 sec");
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
@@ -95,6 +78,7 @@ public class Parser  {
                     }
                 }
             }
+
         }
 
         long runTime = (System.nanoTime() - startTime) / 10000000;
@@ -104,8 +88,11 @@ public class Parser  {
         System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
     }
 
-
+return offers;
 }
+
+
+
 
 
     private static String cleanHTML(String html) {
