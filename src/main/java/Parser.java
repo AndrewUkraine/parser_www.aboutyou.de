@@ -10,19 +10,40 @@ import java.util.List;
 
 public class Parser  {
 
+    private volatile static int httpRequests = 0;
+    long startTime = System.nanoTime();
+
+
   public  synchronized List<Offer> parser (String brand, int quantityPage){
-
       List<Offer> offers = new ArrayList<>();
-
       int[] categories = new int[]{138113, 20201, 20202};
       for (int category : categories) {
       final String URL = "https://www.aboutyou.de/suche?" + "term=" + brand.replaceAll(" ", "+") + "&category=" + category + "&page=";
 
-      int httpRequests = 0;
-      int numberPage = 1;
-      long startTime = System.nanoTime();
 
-        for (int i = 1; i <=quantityPage; i++) {
+          //find of total of goods
+          Document doc0 = null;
+          try {
+              doc0 = Jsoup.connect(URL).get();
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+
+          Elements elements10;
+          elements10 =  doc0.getElementsByClass("styles__brandProductCount--1VNm6");
+          String qGoods = elements10.text();
+          if (qGoods.length()!=0){
+              String tq= qGoods.replaceAll("[Produkte]", "");
+              System.out.println("Total amount of goods: " + tq);
+          }
+          else {
+              elements10 =  doc0.getElementsByClass("styles__productsCount--16QoZ");
+              String qGoods2 = elements10.text();
+              String tq= qGoods2.replaceAll("[Produkte]", "");
+              System.out.println("Total amount of goods: " + tq); }
+
+
+        for (int i =0; i <quantityPage; i++) {
         String url1 = URL + i;
       
 
@@ -32,11 +53,13 @@ public class Parser  {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+            
         Elements elements;
             elements =  doc.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
             for (Element element : elements) {
                 String url = element.attr("href");
+
+
 
                 if (url.contains("/p/")) {
                     String url3 = "https://www.aboutyou.de" + url;
@@ -86,16 +109,11 @@ public class Parser  {
         long runTime = (System.nanoTime() - startTime) / 10000000;
         System.out.println("Run-time = " + runTime / 100 + " sec");
         System.out.println("Amount of triggered HTTP request " + httpRequests);
-        System.out.println("Amount of page " + numberPage);
         System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
     }
 
 return offers;
 }
-
-
-
-
 
     private static String cleanHTML(String html) {
         return html
