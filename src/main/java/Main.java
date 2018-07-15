@@ -20,6 +20,8 @@ public class Main {
         int quantityPages = sc.nextInt();
 
 
+
+
         Parser strategy = new Parser();
         List<Offer> offers = strategy.parser(brand, quantityPages);
         XMLView xmlView = new XMLView();

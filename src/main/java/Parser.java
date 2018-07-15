@@ -4,8 +4,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
+import java.util.Scanner;
 
 
 public class Parser  {
@@ -16,10 +17,9 @@ public class Parser  {
 
   public  synchronized List<Offer> parser (String brand, int quantityPage){
       List<Offer> offers = new ArrayList<>();
-      int[] categories = new int[]{138113, 20201, 20202};
+      int[] categories = new int[]{ 20201/*138113*/, /*20202*/};
       for (int category : categories) {
       final String URL = "https://www.aboutyou.de/suche?" + "term=" + brand.replaceAll(" ", "+") + "&category=" + category + "&page=";
-
 
           //find of total of goods
           Document doc0 = null;
@@ -34,28 +34,31 @@ public class Parser  {
           String qGoods = elements10.text();
           if (qGoods.length()!=0){
               String tq= qGoods.replaceAll("[Produkte]", "");
-              System.out.println("Total amount of goods: " + tq);
+              System.out.println("Total amount of goods: " + tq + "Category " + category);
           }
-          else {
+
+          /* if  (qGoods.length()==0){
+              System.out.println("No one goods found. Restart the program.");
+               break; }
+*/
+         else {
               elements10 =  doc0.getElementsByClass("styles__productsCount--16QoZ");
               String qGoods2 = elements10.text();
               String tq= qGoods2.replaceAll("[Produkte]", "");
               System.out.println("Total amount of goods: " + tq); }
 
+          System.out.println("Wait. Processing request....");
 
-        for (int i =0; i <quantityPage; i++) {
-        String url1 = URL + i;
-      
+            try {
+             doc0=   Jsoup.connect(URL).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        Document doc = null;
-        try {
-            doc = Jsoup.connect(url1).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-            
-        Elements elements;
-            elements =  doc.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
+
+            Elements elements;
+
+            elements =  doc0.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
             for (Element element : elements) {
                 String url = element.attr("href");
 
@@ -64,22 +67,23 @@ public class Parser  {
                 if (url.contains("/p/")) {
                     String url3 = "https://www.aboutyou.de" + url;
 
-                    Document doc3 = null;
+
                     try {
-                        doc3 = Jsoup.connect(url3)
+                        doc0 = Jsoup.connect(url3)
                                 .timeout(2000)  //Set the total request timeout duration.
                                 .get();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Elements elements1 = doc3.select(".productPrices"); //price
-                    Elements elements2 = doc3.select(".priceStyles__strike--PSBGK"); //initialPrice
-                    Elements elements3 = doc3.select("h1"); //brand
-                    Elements elements4 = doc3.select(".styles__title--UFKYd"); //color
-                    Elements elements5 = doc3.select(".styles__title--3Jos_"); // name
-                    Elements elements6 = doc3.select(".styles__articleNumber--1UszN"); //articul
-                    Elements elements7 = doc3.select(".styles__textElement--3QlT_"); //description
-                    Elements elements8 = doc3.select(".styles__label--1cfc7"); //shippingCosts
+
+                    Elements elements1 = doc0.select(".productPrices"); //price
+                    Elements elements2 = doc0.select(".priceStyles__strike--PSBGK"); //initialPrice
+                    Elements elements3 = doc0.select("h1"); //brand
+                    Elements elements4 = doc0.select(".styles__title--UFKYd"); //color
+                    Elements elements5 = doc0.select(".styles__title--3Jos_"); // name
+                    Elements elements6 = doc0.select(".styles__articleNumber--1UszN"); //articul
+                    Elements elements7 = doc0.select(".styles__textElement--3QlT_"); //description
+                    Elements elements8 = doc0.select(".styles__label--1cfc7"); //shippingCosts
 
                     httpRequests++;
 
@@ -102,17 +106,16 @@ public class Parser  {
                         }
                     }*/
                 }
+
+
             }
-
-        }
-
-        long runTime = (System.nanoTime() - startTime) / 10000000;
-        System.out.println("Run-time = " + runTime / 100 + " sec");
-        System.out.println("Amount of triggered HTTP request " + httpRequests);
-        System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
     }
-
-return offers;
+      offers.forEach(System.out::println);
+      long runTime = (System.nanoTime() - startTime) / 10000000;
+      System.out.println("Run-time = " + runTime / 100 + " sec");
+      System.out.println("Amount of triggered HTTP request " + httpRequests);
+      System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
+      return offers;
 }
 
     private static String cleanHTML(String html) {
@@ -123,7 +126,7 @@ return offers;
                 .replaceAll("<!--.*?-->", "")
                 .replaceAll(" +", " ")
                 .replaceAll("\n ", "\n")
-                .replaceAll("[ab]", "")
+                //.replaceAll("[ab]", "")
                 .replaceAll("[spn]", "")
                 .replaceAll("\n+", "");
     }
