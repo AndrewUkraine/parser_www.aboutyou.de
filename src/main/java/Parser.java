@@ -43,7 +43,9 @@ public class Parser  {
 
                     Document doc3 = null;
                     try {
-                        doc3 = Jsoup.connect(url3).get();
+                        doc3 = Jsoup.connect(url3)
+                                .timeout(2000)  //Set the total request timeout duration.
+                                .get();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -69,13 +71,13 @@ public class Parser  {
                     offer.setShippingCosts(cleanHTML(elements8.text()));
                     offers.add(offer);
 
-                    if (httpRequests % 5 == 0) {
+                    /*if (httpRequests % 5 == 0) {
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                    }
+                    }*/
                 }
             }
 
