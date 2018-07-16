@@ -10,6 +10,7 @@ public class Parser {
 
     volatile static int httpRequests = 0;
     long startTime = System.nanoTime();
+    int numberOfPage = 1;
 
     private String pattern;
 
@@ -41,6 +42,7 @@ public class Parser {
         amounOfProducts();
 
         for (int i=0; i<amounOfProducts(); i++) {
+            System.out.println("Number Of Page: " + numberOfPage++);
 
             for (String category : arrayList) {
 
@@ -52,8 +54,8 @@ public class Parser {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println("---------------------------------------------------------------------------");
-                System.out.println("Wait. Processing request....");
+
+                System.out.println("Waiting. Processing of parsing of page number...." + numberOfPage );
                 System.out.println("---------------------------------------------------------------------------");
                 try {
                     doc0 = Jsoup.connect(category).get();
@@ -149,8 +151,6 @@ public class Parser {
                    float x = Integer.parseInt(tq2);
                    float x2 = x / 99;
                    qOfpages = ((int) Math.ceil(x2));
-                   //System.out.println(qOfpages);
-                   System.out.println("---------------------------------------------------------------------------");
                    System.out.println("Amount of extracted products: " + tq + "in Category " + url);
                    System.out.println("---------------------------------------------------------------------------");
                }
@@ -163,8 +163,6 @@ public class Parser {
                    float x = Integer.parseInt(tq2);
                    float x2 = x / 99;
                    qOfpages = ((int) Math.ceil(x2));
-                   //System.out.println(qOfpages);
-                   System.out.println("---------------------------------------------------------------------------");
                    System.out.println("Amount of extracted products: " + tq + "in Category "+ url);
                    System.out.println("---------------------------------------------------------------------------");
                }

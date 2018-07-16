@@ -19,12 +19,18 @@ public class Main {
         offers.forEach(System.out::println);
 
         long runTime = (System.nanoTime() - parser.startTime) / 10000000;
-        System.out.println("---------------------------------------------------------------------------");
+
         System.out.println("Run-time = " + runTime / 100 + " sec");
         System.out.println("---------------------------------------------------------------------------");
+
         System.out.println("Amount of triggered HTTP request " + parser.httpRequests);
         System.out.println("---------------------------------------------------------------------------");
+
+
         System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
+        System.out.println("---------------------------------------------------------------------------");
+
+        System.out.println ("Number Of Page : " + parser.numberOfPage);
         System.out.println("---------------------------------------------------------------------------");
 
     }
