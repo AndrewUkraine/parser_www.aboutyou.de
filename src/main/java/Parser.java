@@ -33,6 +33,12 @@ public class Parser {
             String qGoods = elements10.text();
             if (qGoods.length() != 0) {
                 String tq = qGoods.replaceAll("[Produkte]", "");
+                String tq2 =   tq.replaceAll(" ", "");
+                float x = Integer.parseInt(tq2);
+                float x2 = x/99;
+               int x3 = ((int)Math.ceil(x2));
+               System.out.println(x3);
+                
                 System.out.println("---------------------------------------------------------------------------");
                 System.out.println("Amount of extracted products: " + tq + "in Category " + category);
                 System.out.println("---------------------------------------------------------------------------");
@@ -48,6 +54,11 @@ public class Parser {
                 elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
                 String qGoods2 = elements10.text();
                 String tq = qGoods2.replaceAll("[Produkte]", "");
+                 String tq2 =   tq.replaceAll(" ", "");
+                  float x = Integer.parseInt(tq2);
+                  float x2 = x/99;
+                  int x3 = ((int)Math.ceil(x2));
+                   System.out.println(x3);
                 System.out.println("---------------------------------------------------------------------------");
                 System.out.println("Amount of extracted products: " + tq + "in Category " + category);
                 System.out.println("---------------------------------------------------------------------------");
@@ -62,6 +73,7 @@ public class Parser {
                 e.printStackTrace();
             }
 
+            
 
             Elements elements;
 
