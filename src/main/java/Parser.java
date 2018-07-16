@@ -55,7 +55,7 @@ public class Parser {
                     e.printStackTrace();
                 }
 
-                System.out.println("Waiting. Processing of parsing of page....");
+                System.out.println("Waiting. Processing of parsing of the page....");
                 System.out.println("---------------------------------------------------------------------------");
                 try {
                     doc0 = Jsoup.connect(category).get();
