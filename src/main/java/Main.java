@@ -10,20 +10,18 @@ public class Main {
         System.out.println("Input keyword");
         Scanner sc = new Scanner(System.in);
         String brand = sc.nextLine();
-        System.out.println("Input quantity of pages for scanning...");
-        int quantityPages = sc.nextInt();
+       // System.out.println("Input quantity of pages for scanning...");
+       // int quantityPages = sc.nextInt();
 
 
 
 
         Parser parser = new Parser();
         parser.setPattern(brand);
-
         parser.getUrlSetFromSearchByPattern();
 
-      //  parser.parser2(parser.getUrlSetFromSearchByPattern());
 
-
+       parser.amounOfProducts();
 
 
         List<Offer> offers = parser.parser2(parser.getUrlSetFromSearchByPattern()) ;
