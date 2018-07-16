@@ -4,53 +4,59 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 
-public class Parser  {
 
-    private volatile static int httpRequests = 0;
+public class Parser {
+
+    volatile static int httpRequests = 0;
     long startTime = System.nanoTime();
 
 
-  public  synchronized List<Offer> parser (String brand, int quantityPage){
-      List<Offer> offers = new ArrayList<>();
-      int[] categories = new int[]{ 20201/*138113*/, /*20202*/};
-      for (int category : categories) {
-      final String URL = "https://www.aboutyou.de/suche?" + "term=" + brand.replaceAll(" ", "+") + "&category=" + category + "&page=";
+    public synchronized List<Offer> parser(String brand, int quantityPage) {
+        List<Offer> offers = new ArrayList<>();
+        int[] categories = new int[]{20201,138113, 20202};
+        for (int category : categories) {
+            final String URL = "https://www.aboutyou.de/suche?" + "term=" + brand.replaceAll(" ", "+") + "&category=" + category + "&page=";
 
-          //find of total of goods
-          Document doc0 = null;
-          try {
-              doc0 = Jsoup.connect(URL).get();
-          } catch (IOException e) {
-              e.printStackTrace();
-          }
-
-          Elements elements10;
-          elements10 =  doc0.getElementsByClass("styles__brandProductCount--1VNm6");
-          String qGoods = elements10.text();
-          if (qGoods.length()!=0){
-              String tq= qGoods.replaceAll("[Produkte]", "");
-              System.out.println("Total amount of goods: " + tq + "Category " + category);
-          }
-
-          /* if  (qGoods.length()==0){
-              System.out.println("No one goods found. Restart the program.");
-               break; }
-*/
-         else {
-              elements10 =  doc0.getElementsByClass("styles__productsCount--16QoZ");
-              String qGoods2 = elements10.text();
-              String tq= qGoods2.replaceAll("[Produkte]", "");
-              System.out.println("Total amount of goods: " + tq); }
-
-          System.out.println("Wait. Processing request....");
-
+            //find of total of goods
+            Document doc0 = null;
             try {
-             doc0=   Jsoup.connect(URL).get();
+                doc0 = Jsoup.connect(URL).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Elements elements10;
+            elements10 = doc0.getElementsByClass("styles__brandProductCount--1VNm6");
+            String qGoods = elements10.text();
+            if (qGoods.length() != 0) {
+                String tq = qGoods.replaceAll("[Produkte]", "");
+                System.out.println("***************************************************************************");
+                System.out.println("Amount of extracted products: " + tq + "Category " + category);
+                System.out.println("***************************************************************************");
+            }
+
+            /*if (qGoods.length() == 0) {
+                System.out.println("***************************************************************************");
+                System.out.println("No one goods found. Restart the program.");
+                System.out.println("***************************************************************************");
+                break;
+
+            }*/ else {
+                elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
+                String qGoods2 = elements10.text();
+                String tq = qGoods2.replaceAll("[Produkte]", "");
+                System.out.println("***************************************************************************");
+                System.out.println("Amount of extracted products: " + tq);
+                System.out.println("***************************************************************************");
+            }
+            System.out.println("***************************************************************************");
+            System.out.println("Wait. Processing request....");
+            System.out.println("***************************************************************************");
+            try {
+                doc0 = Jsoup.connect(URL).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -58,11 +64,9 @@ public class Parser  {
 
             Elements elements;
 
-            elements =  doc0.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
+            elements = doc0.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
             for (Element element : elements) {
                 String url = element.attr("href");
-
-
 
                 if (url.contains("/p/")) {
                     String url3 = "https://www.aboutyou.de" + url;
@@ -72,6 +76,7 @@ public class Parser  {
                         doc0 = Jsoup.connect(url3)
                                 .timeout(2000)  //Set the total request timeout duration.
                                 .get();
+                        httpRequests++;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -85,7 +90,7 @@ public class Parser  {
                     Elements elements7 = doc0.select(".styles__textElement--3QlT_"); //description
                     Elements elements8 = doc0.select(".styles__label--1cfc7"); //shippingCosts
 
-                    httpRequests++;
+
 
                     Offer offer = new Offer();
                     offer.setName(cleanHTML(elements5.text()));
@@ -109,14 +114,10 @@ public class Parser  {
 
 
             }
+        }
+
+        return offers;
     }
-      offers.forEach(System.out::println);
-      long runTime = (System.nanoTime() - startTime) / 10000000;
-      System.out.println("Run-time = " + runTime / 100 + " sec");
-      System.out.println("Amount of triggered HTTP request " + httpRequests);
-      System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
-      return offers;
-}
 
     private static String cleanHTML(String html) {
         return html
@@ -132,8 +133,8 @@ public class Parser  {
     }
 
     private static String brandCleaner(String a) {
-      if (a.length()!=0){
-        return a.substring(0, a.indexOf("|"));}
-        else return null;
+        if (a.length() != 0) {
+            return a.substring(0, a.indexOf("|"));
+        } else return null;
     }
 }

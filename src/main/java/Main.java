@@ -1,10 +1,4 @@
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-
 import java.io.IOException;
 import java.util.*;
 
@@ -22,12 +16,20 @@ public class Main {
 
 
 
-        Parser strategy = new Parser();
-        List<Offer> offers = strategy.parser(brand, quantityPages);
+        Parser parser = new Parser();
+        List<Offer> offers =parser.parser(brand, quantityPages);
         XMLView xmlView = new XMLView();
         xmlView.update(offers);
         offers.forEach(System.out::println);
 
+        long runTime = (System.nanoTime() - parser.startTime) / 10000000;
+        System.out.println("***************************************************************************");
+        System.out.println("Run-time = " + runTime / 100 + " sec");
+        System.out.println("***************************************************************************");
+        System.out.println("Amount of triggered HTTP request " + parser.httpRequests);
+        System.out.println("***************************************************************************");
+        System.out.println ("Memory Footprint: " + ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024) + " kilobytes.");
+        System.out.println("***************************************************************************");
 
     }
 }
