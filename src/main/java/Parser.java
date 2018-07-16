@@ -2,7 +2,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -24,7 +23,7 @@ public class Parser {
 
 
     //https links
-    public ArrayList<String> getUrlSetFromSearchByPattern() { //brand
+    public synchronized ArrayList<String> getUrlSetFromSearchByPattern() { //brand
         ArrayList<String> offersURLs = new ArrayList<String>();
         int[] categories = new int[]{138113, 20201, 20202};
         for (int category : categories) {
@@ -41,7 +40,6 @@ public class Parser {
 
         for (String category : arrayList) {
 
-            //find of total of goods
             Document doc0 = null;
             try {
                 doc0 = Jsoup.connect(category).get();
@@ -57,9 +55,6 @@ public class Parser {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
-
 
             Elements elements;
 
@@ -100,14 +95,6 @@ public class Parser {
                     offer.setArticleId(cleanHTML(elements6.text()));
                     offer.setShippingCosts(cleanHTML(elements8.text()));
                     offers.add(offer);
-
-                    /*if (httpRequests % 5 == 0) {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }*/
                 }
             }
         }
@@ -134,8 +121,8 @@ public class Parser {
         } else return null;
     }
 
-   public   void amounOfProducts() {
-       int x3 = 0;
+   public int amounOfProducts() {
+       int qOfpages = 0;
 
        for (String url: getUrlSetFromSearchByPattern() ) {
 
@@ -146,6 +133,7 @@ public class Parser {
                e.printStackTrace();
            }
 
+
            Elements elements10 = doc0.getElementsByClass("styles__brandProductCount--1VNm6");
            String qGoods = elements10.text();
            if (qGoods.length() != 0) {
@@ -154,9 +142,8 @@ public class Parser {
                if (tq2.length() > 0) {
                    float x = Integer.parseInt(tq2);
                    float x2 = x / 99;
-                   x3 = ((int) Math.ceil(x2));
-                   System.out.println(x3);
-
+                   qOfpages = ((int) Math.ceil(x2));
+                   //System.out.println(qOfpages);
                    System.out.println("---------------------------------------------------------------------------");
                    System.out.println("Amount of extracted products: " + tq + "in Category " + url);
                    System.out.println("---------------------------------------------------------------------------");
@@ -169,8 +156,8 @@ public class Parser {
                if (tq2.length() > 0) {
                    float x = Integer.parseInt(tq2);
                    float x2 = x / 99;
-                   x3 = ((int) Math.ceil(x2));
-                   System.out.println(x3);
+                   qOfpages = ((int) Math.ceil(x2));
+                   //System.out.println(qOfpages);
                    System.out.println("---------------------------------------------------------------------------");
                    System.out.println("Amount of extracted products: " + tq + "in Category "+ url);
                    System.out.println("---------------------------------------------------------------------------");
@@ -178,7 +165,10 @@ public class Parser {
 
            }
 
+
        }
+       System.out.println(qOfpages);
+       return qOfpages;
    }
 }
 
