@@ -17,10 +17,19 @@ public class Main {
 
 
         Parser parser = new Parser();
-        List<Offer> offers =parser.parser(brand, quantityPages);
+        parser.setPattern(brand);
+
+        parser.getUrlSetFromSearchByPattern();
+
+      //  parser.parser2(parser.getUrlSetFromSearchByPattern());
+
+
+
+
+        List<Offer> offers = parser.parser2(parser.getUrlSetFromSearchByPattern()) ;
         XMLView xmlView = new XMLView();
         xmlView.update(offers);
-        offers.forEach(System.out::println);
+       offers.forEach(System.out::println);
 
         long runTime = (System.nanoTime() - parser.startTime) / 10000000;
         System.out.println("---------------------------------------------------------------------------");

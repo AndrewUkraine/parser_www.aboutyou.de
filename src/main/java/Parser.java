@@ -4,8 +4,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 public class Parser {
@@ -13,67 +14,57 @@ public class Parser {
     volatile static int httpRequests = 0;
     long startTime = System.nanoTime();
 
+   private String pattern;
 
-    public synchronized List<Offer> parser(String brand, int quantityPage) {
-        List<Offer> offers = new ArrayList<>();
-        int[] categories = new int[]{20201,138113, 20202};
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
+
+    //храним ссылку + меняет категорию + назначаем поиск //есть 3 ссылки с разными категориями
+    public  ArrayList<String> getUrlSetFromSearchByPattern() { //brand
+        ArrayList<String> offersURLs = new ArrayList<String>();
+        int[] categories = new int[]{138113, 20201, 20202};
         for (int category : categories) {
-            final String URL = "https://www.aboutyou.de/suche?" + "term=" + brand.replaceAll(" ", "+") + "&category=" + category + "&page=";
+            offersURLs.add("https://www.aboutyou.de/suche?"
+                    + "term=" + getPattern() .replaceAll(" ", "+")
+                    + "&category=" + category);
+        }
+        return offersURLs;
+    }
+
+
+    public  synchronized List<Offer> parser2(ArrayList<String> arrayList ) {
+       // Set<String> offersURLs = new HashSet<>();
+
+        List<Offer> offers = new ArrayList<>();
+
+        for ( String category : arrayList) {
+
 
             //find of total of goods
             Document doc0 = null;
             try {
-                doc0 = Jsoup.connect(URL).get();
+                doc0 = Jsoup.connect(category).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            Elements elements10;
-            elements10 = doc0.getElementsByClass("styles__brandProductCount--1VNm6");
-            String qGoods = elements10.text();
-            if (qGoods.length() != 0) {
-                String tq = qGoods.replaceAll("[Produkte]", "");
-                String tq2 =   tq.replaceAll(" ", "");
-                float x = Integer.parseInt(tq2);
-                float x2 = x/99;
-               int x3 = ((int)Math.ceil(x2));
-               System.out.println(x3);
-                
-                System.out.println("---------------------------------------------------------------------------");
-                System.out.println("Amount of extracted products: " + tq + "in Category " + category);
-                System.out.println("---------------------------------------------------------------------------");
-            }
 
-            /*if (qGoods.length() == 0) {
-                System.out.println("***************************************************************************");
-                System.out.println("No one goods found. Restart the program.");
-                System.out.println("***************************************************************************");
-                break;
-
-            }*/ else {
-                elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
-                String qGoods2 = elements10.text();
-                String tq = qGoods2.replaceAll("[Produkte]", "");
-                 String tq2 =   tq.replaceAll(" ", "");
-                  float x = Integer.parseInt(tq2);
-                  float x2 = x/99;
-                  int x3 = ((int)Math.ceil(x2));
-                   System.out.println(x3);
-                System.out.println("---------------------------------------------------------------------------");
-                System.out.println("Amount of extracted products: " + tq + "in Category " + category);
-                System.out.println("---------------------------------------------------------------------------");
-            }
 
             System.out.println("---------------------------------------------------------------------------");
             System.out.println("Wait. Processing request....");
             System.out.println("---------------------------------------------------------------------------");
             try {
-                doc0 = Jsoup.connect(URL).get();
+                doc0 = Jsoup.connect(category).get();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            
+
 
             Elements elements;
 
@@ -148,4 +139,62 @@ public class Parser {
             return a.substring(0, a.indexOf("|"));
         } else return null;
     }
+
+   /* private  int amounOfProducts() {
+        int x3=0;
+
+        Document doc0 = null;
+        try {
+            doc0 = Jsoup.connect().get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Elements elements10 = doc0.getElementsByClass("styles__brandProductCount--1VNm6");
+        String qGoods = elements10.text();
+        if (qGoods.length() != 0) {
+            String tq = qGoods.replaceAll("[Produkte]", "");
+            String tq2 = tq.replaceAll(" ", "");
+            if (tq2.length() > 0) {
+                float x = Integer.parseInt(tq2);
+                float x2 = x / 99;
+                 x3 = ((int) Math.ceil(x2));
+                System.out.println(x3);
+
+                System.out.println("---------------------------------------------------------------------------");
+                System.out.println("Amount of extracted products: " + tq + "in Category " + category);
+                System.out.println("---------------------------------------------------------------------------");
+            }
+            else return 0;
+        }
+
+
+        else {
+            elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
+            String qGoods2 = elements10.text();
+            String tq = qGoods2.replaceAll("[Produkte]", "");
+            String tq2 = tq.replaceAll(" ", "");
+            if (tq2.length() > 0) {
+                float x = Integer.parseInt(tq2);
+                float x2 = x / 99;
+                 x3 = ((int) Math.ceil(x2));
+                System.out.println(x3);
+                System.out.println("---------------------------------------------------------------------------");
+                System.out.println("Amount of extracted products: " + tq + "in Category " + category);
+                System.out.println("---------------------------------------------------------------------------");
+            }
+            else return 0;
+        }
+
+
+        return x3;
+    }*/
 }
+
+  /*if (qGoods.length() == 0) {
+                System.out.println("***************************************************************************");
+                System.out.println("No one goods found. Restart the program.");
+                System.out.println("***************************************************************************");
+                break;
+
+            }*/
