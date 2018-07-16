@@ -25,7 +25,7 @@ public class Parser {
     //https links
     public synchronized ArrayList<String> getUrlSetFromSearchByPattern() { //brand
         ArrayList<String> offersURLs = new ArrayList<String>();
-        int[] categories = new int[]{138113, 20201, 20202};
+        int[] categories = new int[]{138113/*, 20201, 20202*/};
         for (int category : categories) {
             offersURLs.add("https://www.aboutyou.de/suche?"
                     + "term=" + getPattern().replaceAll(" ", "+")
@@ -38,63 +38,69 @@ public class Parser {
     public synchronized List<Offer> parser2(ArrayList<String> arrayList) {
         List<Offer> offers = new ArrayList<>();
 
-        for (String category : arrayList) {
+        amounOfProducts();
 
-            Document doc0 = null;
-            try {
-                doc0 = Jsoup.connect(category).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        for (int i=0; i<amounOfProducts(); i++) {
 
-            System.out.println("---------------------------------------------------------------------------");
-            System.out.println("Wait. Processing request....");
-            System.out.println("---------------------------------------------------------------------------");
-            try {
-                doc0 = Jsoup.connect(category).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            for (String category : arrayList) {
 
-            Elements elements;
+                String newURL = category + "&sort=topseller&page=" + i;
 
-            elements = doc0.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
-            for (Element element : elements) {
-                String url = element.attr("href");
+                Document doc0 = null;
+                try {
+                    doc0 = Jsoup.connect(newURL).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("---------------------------------------------------------------------------");
+                System.out.println("Wait. Processing request....");
+                System.out.println("---------------------------------------------------------------------------");
+                try {
+                    doc0 = Jsoup.connect(category).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                if (url.contains("/p/")) {
-                    String url3 = "https://www.aboutyou.de" + url;
+                Elements elements;
+
+                elements = doc0.body().getElementsByClass("styles__container--1bqmB").first().getElementsByAttribute("href");
+                for (Element element : elements) {
+                    String url = element.attr("href");
+
+                    if (url.contains("/p/")) {
+                        String url3 = "https://www.aboutyou.de" + url;
 
 
-                    try {
-                        doc0 = Jsoup.connect(url3)
-                                .timeout(2000)  //Set the total request timeout duration.
-                                .get();
-                        httpRequests++;
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        try {
+                            doc0 = Jsoup.connect(url3)
+                                    .timeout(2000)  //Set the total request timeout duration.
+                                    .get();
+                            httpRequests++;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Elements elements1 = doc0.select(".productPrices"); //price
+                        Elements elements2 = doc0.select(".priceStyles__strike--PSBGK"); //initialPrice
+                        Elements elements3 = doc0.select("h1"); //brand
+                        Elements elements4 = doc0.select(".styles__title--UFKYd"); //color
+                        Elements elements5 = doc0.select(".styles__title--3Jos_"); // name
+                        Elements elements6 = doc0.select(".styles__articleNumber--1UszN"); //articul
+                        Elements elements7 = doc0.select(".styles__textElement--3QlT_"); //description
+                        Elements elements8 = doc0.select(".styles__label--1cfc7"); //shippingCosts
+
+
+                        Offer offer = new Offer();
+                        offer.setName(cleanHTML(elements5.text()));
+                        offer.setBrand(cleanHTML(brandCleaner(elements3.text())));
+                        offer.setColor(cleanHTML(elements4.text()));
+                        offer.setPrice(cleanHTML(elements1.text()));
+                        offer.setInitialPrice(cleanHTML(elements2.text()));
+                        offer.setDescription(cleanHTML(elements7.text()));
+                        offer.setArticleId(cleanHTML(elements6.text()));
+                        offer.setShippingCosts(cleanHTML(elements8.text()));
+                        offers.add(offer);
                     }
-
-                    Elements elements1 = doc0.select(".productPrices"); //price
-                    Elements elements2 = doc0.select(".priceStyles__strike--PSBGK"); //initialPrice
-                    Elements elements3 = doc0.select("h1"); //brand
-                    Elements elements4 = doc0.select(".styles__title--UFKYd"); //color
-                    Elements elements5 = doc0.select(".styles__title--3Jos_"); // name
-                    Elements elements6 = doc0.select(".styles__articleNumber--1UszN"); //articul
-                    Elements elements7 = doc0.select(".styles__textElement--3QlT_"); //description
-                    Elements elements8 = doc0.select(".styles__label--1cfc7"); //shippingCosts
-
-
-                    Offer offer = new Offer();
-                    offer.setName(cleanHTML(elements5.text()));
-                    offer.setBrand(cleanHTML(brandCleaner(elements3.text())));
-                    offer.setColor(cleanHTML(elements4.text()));
-                    offer.setPrice(cleanHTML(elements1.text()));
-                    offer.setInitialPrice(cleanHTML(elements2.text()));
-                    offer.setDescription(cleanHTML(elements7.text()));
-                    offer.setArticleId(cleanHTML(elements6.text()));
-                    offer.setShippingCosts(cleanHTML(elements8.text()));
-                    offers.add(offer);
                 }
             }
         }
@@ -165,9 +171,8 @@ public class Parser {
 
            }
 
-
        }
-       System.out.println(qOfpages);
+       /*System.out.println(qOfpages);*/
        return qOfpages;
    }
 }

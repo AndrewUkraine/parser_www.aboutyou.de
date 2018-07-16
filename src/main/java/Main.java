@@ -10,24 +10,13 @@ public class Main {
         System.out.println("Input keyword");
         Scanner sc = new Scanner(System.in);
         String brand = sc.nextLine();
-       // System.out.println("Input quantity of pages for scanning...");
-       // int quantityPages = sc.nextInt();
-
-
-
 
         Parser parser = new Parser();
         parser.setPattern(brand);
-        parser.getUrlSetFromSearchByPattern();
-
-
-       parser.amounOfProducts();
-
-
         List<Offer> offers = parser.parser2(parser.getUrlSetFromSearchByPattern()) ;
         XMLView xmlView = new XMLView();
         xmlView.update(offers);
-       offers.forEach(System.out::println);
+        offers.forEach(System.out::println);
 
         long runTime = (System.nanoTime() - parser.startTime) / 10000000;
         System.out.println("---------------------------------------------------------------------------");
