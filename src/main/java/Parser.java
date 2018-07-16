@@ -33,9 +33,9 @@ public class Parser {
             String qGoods = elements10.text();
             if (qGoods.length() != 0) {
                 String tq = qGoods.replaceAll("[Produkte]", "");
-                System.out.println("***************************************************************************");
-                System.out.println("Amount of extracted products: " + tq + "Category " + category);
-                System.out.println("***************************************************************************");
+                System.out.println("---------------------------------------------------------------------------");
+                System.out.println("Amount of extracted products: " + tq + "in Category " + category);
+                System.out.println("---------------------------------------------------------------------------");
             }
 
             /*if (qGoods.length() == 0) {
@@ -48,13 +48,14 @@ public class Parser {
                 elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
                 String qGoods2 = elements10.text();
                 String tq = qGoods2.replaceAll("[Produkte]", "");
-                System.out.println("***************************************************************************");
-                System.out.println("Amount of extracted products: " + tq);
-                System.out.println("***************************************************************************");
+                System.out.println("---------------------------------------------------------------------------");
+                System.out.println("Amount of extracted products: " + tq + "in Category " + category);
+                System.out.println("---------------------------------------------------------------------------");
             }
-            System.out.println("***************************************************************************");
+
+            System.out.println("---------------------------------------------------------------------------");
             System.out.println("Wait. Processing request....");
-            System.out.println("***************************************************************************");
+            System.out.println("---------------------------------------------------------------------------");
             try {
                 doc0 = Jsoup.connect(URL).get();
             } catch (IOException e) {
@@ -111,8 +112,6 @@ public class Parser {
                         }
                     }*/
                 }
-
-
             }
         }
 
