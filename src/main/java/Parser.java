@@ -170,7 +170,6 @@ public class Parser {
            }
 
        }
-       /*System.out.println(qOfpages);*/
        return qOfpages;
    }
 }
