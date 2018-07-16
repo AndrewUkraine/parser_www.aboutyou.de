@@ -26,7 +26,7 @@ public class Parser {
     //https links
     public synchronized ArrayList<String> getUrlSetFromSearchByPattern() { //brand
         ArrayList<String> offersURLs = new ArrayList<String>();
-        int[] categories = new int[]{138113, 20201, 20202};
+        int[] categories = new int[]{138113/*, 20201, 20202*/};
         for (int category : categories) {
             offersURLs.add("https://www.aboutyou.de/suche?"
                     + "term=" + getPattern().replaceAll(" ", "+")
