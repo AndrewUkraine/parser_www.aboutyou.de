@@ -11,6 +11,25 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         String brand = sc.nextLine();
 
+        System.out.println("What category do you prefer? \n" +
+                "    Kinder -  Cat.138113 Press 1 \n" +
+                "    Frauen -  Cat.20201  Press 2 \n" +
+                "    Männer -  Cat.20202  Press 3");
+       int cat = sc.nextInt();
+            if (cat==1){
+                Parser.setA(138113);
+            }
+        if (cat==2){
+            Parser.setA(20201);
+        }
+        if (cat==3){
+            Parser.setA(20202);
+        }
+        else
+            Parser.setA(138113);
+        System.out.println("No one category is selected. Default category is Männer");
+
+
         Parser parser = new Parser();
         parser.setPattern(brand);
         List<Offer> offers = parser.parser2(parser.getUrlSetFromSearchByPattern()) ;

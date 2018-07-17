@@ -22,11 +22,24 @@ public class Parser {
         this.pattern = pattern;
     }
 
+    public static void setA(int a) {
+        Parser.a = a;
+    }
+
+    private static int a;
+
+   /* int Kinder = 138113;
+    int Frauen = 20201;
+    int  Männer = 20202;
+    int [] all = {138113, 20201, 20202};*/
+
+
+
 
     //https links
     public synchronized ArrayList<String> getUrlSetFromSearchByPattern() { //brand
         ArrayList<String> offersURLs = new ArrayList<String>();
-        int[] categories = new int[]{138113/*, 20201, 20202*/};
+        int[] categories = new int[]{a}; /*138113, 20201, 20202;*/
         for (int category : categories) {
             offersURLs.add("https://www.aboutyou.de/suche?"
                     + "term=" + getPattern().replaceAll(" ", "+")
