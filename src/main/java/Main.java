@@ -18,16 +18,20 @@ public class Main {
        int cat = sc.nextInt();
             if (cat==1){
                 Parser.setA(138113);
+                System.out.println("You choosed category Kinder");
             }
-        if (cat==2){
+            else if (cat==2){
             Parser.setA(20201);
+            System.out.println("You choosed category Frauen");
         }
-        if (cat==3){
+            else if (cat==3){
             Parser.setA(20202);
+            System.out.println("You choosed category Männer");
         }
-        else
-            Parser.setA(138113);
-        System.out.println("No one category is selected. Default category is Männer");
+       else {
+        System.out.println("No one category is selected. Good-bye!");
+        System.out.println("---------------------------------------------------------------------------");
+        return;}
 
 
         Parser parser = new Parser();
