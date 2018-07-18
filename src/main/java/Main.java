@@ -18,15 +18,15 @@ public class Main {
        int cat = sc.nextInt();
             if (cat==1){
                 Parser.setA(138113);
-                System.out.println("You choosed category Kinder");
+                System.out.println("You choosed category Kinder. Waiting...determination quantity of pages");
             }
             else if (cat==2){
             Parser.setA(20201);
-            System.out.println("You choosed category Frauen");
+            System.out.println("You choosed category Frauen. Waiting...determination quantity of pages");
         }
             else if (cat==3){
             Parser.setA(20202);
-            System.out.println("You choosed category Männer");
+            System.out.println("You choosed category Männer. Waiting...determination quantity of pages");
         }
        else {
         System.out.println("No one category is selected. Good-bye!");

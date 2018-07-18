@@ -51,9 +51,6 @@ public class Parser {
     public synchronized List<Offer> parser2(ArrayList<String> arrayList) {
         List<Offer> offers = new ArrayList<>();
 
-        amounOfProducts();
-
-
         for (String category : arrayList) {
 
 
@@ -157,7 +154,7 @@ public class Parser {
             if (qGoods.length() != 0) {
                 String tq = qGoods.replaceAll("[Produkte]", "");
                 String tq2 = tq.replaceAll(" ", "");
-                System.out.println("Amount of extracted products: " + tq2 + "in Category " + url);
+                System.out.println("Amount of extracted products: " + tq2 + " in Category " + url);
                 System.out.println("---------------------------------------------------------------------------");
             }
          else
@@ -166,7 +163,7 @@ public class Parser {
             String qGoods2 = elements10.text();
             String tq = qGoods2.replaceAll("[Produkte]", "");
             String tq2 = tq.replaceAll(" ", "");
-            System.out.println("Amount of extracted products: " + tq2 + "in Category " + url);
+            System.out.println("Amount of extracted products: " + tq2 + " in Category " + url);
                  System.out.println("---------------------------------------------------------------------------");
         }
     }
@@ -175,6 +172,8 @@ public class Parser {
 
     //get our link #1 and make links for each pages -> push to parser2
     public ArrayList<String> urlPagenation() {
+        amounOfProducts();
+
         boolean ar = true;
 
         ArrayList<String> arrayList5 = new ArrayList<>();
@@ -184,7 +183,9 @@ public class Parser {
         {
             String newURL = arrayList5.get(arrayList5.size() - 1);
 
+
             Document doc0 = null;
+
             try {
                 doc0 = Jsoup.connect(newURL).get();
             } catch (IOException e) {
