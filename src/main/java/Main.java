@@ -36,7 +36,8 @@ public class Main {
 
         Parser parser = new Parser();
         parser.setPattern(brand);
-        List<Offer> offers = parser.parser2(parser.getUrlSetFromSearchByPattern()) ;
+        parser.urlPagenation();
+        List<Offer> offers = parser.parser2(parser.urlPagenation()) ;
         XMLView xmlView = new XMLView();
         xmlView.update(offers);
         offers.forEach(System.out::println);
