@@ -185,6 +185,43 @@ public class Parser {
        }
        return qOfpages;
    }
+
+
+    public ArrayList<String> urlPagenation() {
+
+
+
+        ArrayList<String> arrayList5 = new ArrayList<>();
+        arrayList5.add(getUrlSetFromSearchByPattern().toString().replaceAll("^\\[|\\]$", ""));
+
+        do {
+            for (String url : arrayList5) {
+
+                Document doc0 = null;
+                try {
+                    doc0 = Jsoup.connect(url).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Elements elements10 = doc0.body().getElementsByClass("styles__buttonNext--3YXvj").first().getElementsByAttribute("href");
+                for (Element element : elements10) {
+                    String url2 = element.attr("href");
+
+                    if (url2.contains("/about/brand/")) {
+                        String url3 = "https://www.aboutyou.de" + url2;
+
+                        arrayList5.add(url3);
+
+
+                    }
+
+                }
+
+            }
+        } while (true);
+
+
+    }
 }
 
   /*if (qGoods.length() == 0) {
