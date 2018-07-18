@@ -172,7 +172,6 @@ public class Parser {
 
     //get our link #1 and make links for each pages -> push to parser2
     public ArrayList<String> urlPagenation() {
-        amounOfProducts();
 
         boolean ar = true;
 
@@ -194,15 +193,16 @@ public class Parser {
             Elements elements10 = doc0.body().getElementsByClass("styles__buttonNext--3YXvj").first().getElementsByAttribute("href");
             if (elements10.size() == 0) {
                 ar = false;
+                //styles__buttonLink--BgPaW
             }
             for (Element element : elements10) {
                 String url2 = element.attr("href");
 
-                if (url2.contains("/about/brand/")) {
+               // if (url2.contains("/about/brand/")) {
                     String url3 = "https://www.aboutyou.de" + url2;
                     arrayList5.add(url3);
 
-                }
+               // }
             }
         }
         return arrayList5;

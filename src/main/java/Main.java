@@ -36,6 +36,7 @@ public class Main {
 
         Parser parser = new Parser();
         parser.setPattern(brand);
+        parser.amounOfProducts();
         List<Offer> offers = parser.parser2(parser.urlPagenation()) ;
         XMLView xmlView = new XMLView();
         xmlView.update(offers);
