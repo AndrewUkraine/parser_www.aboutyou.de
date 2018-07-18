@@ -64,7 +64,7 @@ public class Parser {
                 e.printStackTrace();
             }
 
-            System.out.println("Waiting. Processing of parsing of the page....");
+            System.out.println("Waiting. Processing of parsing of the page....for page: " + category);
             System.out.println("---------------------------------------------------------------------------");
             try {
                 doc0 = Jsoup.connect(category).get();
@@ -157,29 +157,19 @@ public class Parser {
             if (qGoods.length() != 0) {
                 String tq = qGoods.replaceAll("[Produkte]", "");
                 String tq2 = tq.replaceAll(" ", "");
-                if (tq2.length() > 0) {
-                    float x = Integer.parseInt(tq2);
-                    float x2 = x / 99;
-                    qOfpages = ((int) Math.ceil(x2));
-                    System.out.println("Amount of extracted products: " + tq + "in Category " + url);
-                    System.out.println("---------------------------------------------------------------------------");
-                }
-            } else {
-                elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
-                String qGoods2 = elements10.text();
-                String tq = qGoods2.replaceAll("[Produkte]", "");
-                String tq2 = tq.replaceAll(" ", "");
-                if (tq2.length() > 0) {
-                    float x = Integer.parseInt(tq2);
-                    float x2 = x / 99;
-                    qOfpages = ((int) Math.ceil(x2));
-                    System.out.println("Amount of extracted products: " + tq + "in Category " + url);
-                    System.out.println("---------------------------------------------------------------------------");
-                }
-
+                System.out.println("Amount of extracted products: " + tq2 + "in Category " + url);
+                System.out.println("---------------------------------------------------------------------------");
             }
-
+         else
+             {
+            elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
+            String qGoods2 = elements10.text();
+            String tq = qGoods2.replaceAll("[Produkte]", "");
+            String tq2 = tq.replaceAll(" ", "");
+            System.out.println("Amount of extracted products: " + tq2 + "in Category " + url);
+                 System.out.println("---------------------------------------------------------------------------");
         }
+    }
         return qOfpages;
     }
 
@@ -216,13 +206,5 @@ public class Parser {
         }
         return arrayList5;
     }
-
 }
 
-  /*if (qGoods.length() == 0) {
-                System.out.println("***************************************************************************");
-                System.out.println("No one goods found. Restart the program.");
-                System.out.println("***************************************************************************");
-                break;
-
-            }*/
