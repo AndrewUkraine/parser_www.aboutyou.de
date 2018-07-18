@@ -188,13 +188,15 @@ public class Parser {
 
 
     public ArrayList<String> urlPagenation() {
-
+ boolean ar=true;
 
 
         ArrayList<String> arrayList5 = new ArrayList<>();
         arrayList5.add(getUrlSetFromSearchByPattern().toString().replaceAll("^\\[|\\]$", ""));
 
-        do {
+        while (ar)
+
+        {
         String newURL=arrayList5.get(arrayList5.size()-1);
 
                 Document doc0 = null;
@@ -203,8 +205,11 @@ public class Parser {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+          //  if (elements10.text().contains("styles__buttonNext--3YXvj disabled"))
                 Elements elements10 = doc0.body().getElementsByClass("styles__buttonNext--3YXvj").first().getElementsByAttribute("href");
+                if (elements10.size()==0){
+                    ar=false;
+            }
                 for (Element element : elements10) {
                     String url2 = element.attr("href");
 
@@ -213,16 +218,11 @@ public class Parser {
                         arrayList5.add(url3);
 
                     }
-
                 }
+            }
 
-
-
-
-            }while (true);
-
-
-
+       // if (elements10 = doc0.body().getElementsByClass("styles__buttonNext--3YXvj disabled").first().getElementsByAttribute("href"))
+return arrayList5;
     }
 
 }
