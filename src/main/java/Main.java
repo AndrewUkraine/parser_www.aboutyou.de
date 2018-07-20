@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class Main {
@@ -38,6 +39,13 @@ public class Main {
         parser.setPattern(brand);
         parser.amounOfProducts();
         List<Offer> offers = parser.parser2(parser.urlPagenation()) ;
+
+        GetConnection getConnection = new GetConnection();
+        try {
+            getConnection.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         XMLView xmlView = new XMLView();
         xmlView.update(offers);
         offers.forEach(System.out::println);
