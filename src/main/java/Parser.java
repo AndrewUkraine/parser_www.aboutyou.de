@@ -12,6 +12,7 @@ import java.util.*;
 public class Parser {
 
 
+
     volatile static int httpRequests = 0;
     long startTime = System.nanoTime();
     int numberOfPage = 1;
@@ -100,35 +101,39 @@ public class Parser {
                     Elements elements7 = doc0.select(".styles__textElement--3QlT_"); //description
                     Elements elements8 = doc0.select(".styles__label--1cfc7"); //shippingCosts
 
-                    GetConnection getConnection2 = new GetConnection();
 
-
-                    String query = "INSERT INTO offerdb (name, brand, color, price, initialPrice, description, articleId, shippingCosts)"
-                            + " VALUES (?,?,?,?,?,?,?,?)";
-
-
-                    getConnection2.preparedStatement = getConnection2.getConnection().prepareStatement(query);
-
-
+                    Db db = new Db();
                     Offer offer = new Offer();
+                    GetConnection getConnection = new GetConnection();
+
                     offer.setName(cleanHTML(elements5.text()));
-                    getConnection2.preparedStatement.setString(1, elements5.text()); //db
+                    db.setName(elements5.text());
+
                     offer.setBrand(cleanHTML(brandCleaner(elements3.text())));
-                    getConnection2.preparedStatement.setString(2, brandCleaner(elements3.text())); //db
+                    db.setBrand(brandCleaner(elements3.text()));
+
                     offer.setColor(cleanHTML(elements4.text()));
-                    getConnection2.preparedStatement.setString(3, elements4.text()); //db
+                    db.setColor(elements4.text());
+
                     offer.setPrice(cleanHTML(elements1.text()));
-                    getConnection2.preparedStatement.setString(4, elements1.text()); //db
+                    db.setPrice(elements1.text());
+
                     offer.setInitialPrice(cleanHTML(elements2.text()));
-                    getConnection2.preparedStatement.setString(5, elements2.text()); //db
+                    db.setInitialPrice(elements2.text());
+
                     offer.setDescription(cleanHTML(elements7.text()));
-                    getConnection2.preparedStatement.setString(6, elements7.text()); //db
+                    db.setDescription(elements7.text());
+
                     offer.setArticleId(cleanHTML(elements6.text()));
-                    getConnection2.preparedStatement.setString(7, elements6.text()); //db
+                    db.setArticleId(elements6.text());
+
                     offer.setShippingCosts(cleanHTML(elements8.text()));
-                    getConnection2.preparedStatement.setString(8, elements8.text()); //db
+                    db.setShippingCosts(elements8.text());
+
+                    getConnection.saveToBd();
+
                     offers.add(offer);
-                    getConnection2.preparedStatement.executeUpdate(); //db
+
                 }
             }
         }
