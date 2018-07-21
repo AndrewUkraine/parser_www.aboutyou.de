@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlSeeAlso({Offers.class})
 @XmlType(propOrder = {"name", "brand", "color", "price", "initialPrice", "description", "articleId", "shippingCosts"})
+
 public class Offer {
     private String name;
     private String brand;

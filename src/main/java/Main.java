@@ -6,7 +6,7 @@ import java.util.*;
 public class Main {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
 
         System.out.println("Input keyword");
         Scanner sc = new Scanner(System.in);
@@ -40,12 +40,6 @@ public class Main {
         parser.amounOfProducts();
         List<Offer> offers = parser.parser2(parser.urlPagenation()) ;
 
-        GetConnection getConnection = new GetConnection();
-        try {
-            getConnection.save();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         XMLView xmlView = new XMLView();
         xmlView.update(offers);
         offers.forEach(System.out::println);

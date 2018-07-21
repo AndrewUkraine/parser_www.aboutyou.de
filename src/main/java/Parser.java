@@ -4,10 +4,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 
 public class Parser {
+
 
     volatile static int httpRequests = 0;
     long startTime = System.nanoTime();
@@ -48,7 +51,7 @@ public class Parser {
     }
 
 
-    public synchronized List<Offer> parser2(ArrayList<String> arrayList) {
+    public synchronized List<Offer> parser2(ArrayList<String> arrayList) throws SQLException {
         List<Offer> offers = new ArrayList<>();
 
         for (String category : arrayList) {
@@ -97,22 +100,38 @@ public class Parser {
                     Elements elements7 = doc0.select(".styles__textElement--3QlT_"); //description
                     Elements elements8 = doc0.select(".styles__label--1cfc7"); //shippingCosts
 
+                    GetConnection getConnection2 = new GetConnection();
+
+
+                    String query = "INSERT INTO offerdb (name, brand, color, price, initialPrice, description, articleId, shippingCosts)"
+                            + " VALUES (?,?,?,?,?,?,?,?)";
+
+
+                    getConnection2.preparedStatement = getConnection2.getConnection().prepareStatement(query);
+
 
                     Offer offer = new Offer();
                     offer.setName(cleanHTML(elements5.text()));
+                    getConnection2.preparedStatement.setString(1, elements5.text()); //db
                     offer.setBrand(cleanHTML(brandCleaner(elements3.text())));
+                    getConnection2.preparedStatement.setString(2, brandCleaner(elements3.text())); //db
                     offer.setColor(cleanHTML(elements4.text()));
+                    getConnection2.preparedStatement.setString(3, elements4.text()); //db
                     offer.setPrice(cleanHTML(elements1.text()));
+                    getConnection2.preparedStatement.setString(4, elements1.text()); //db
                     offer.setInitialPrice(cleanHTML(elements2.text()));
+                    getConnection2.preparedStatement.setString(5, elements2.text()); //db
                     offer.setDescription(cleanHTML(elements7.text()));
+                    getConnection2.preparedStatement.setString(6, elements7.text()); //db
                     offer.setArticleId(cleanHTML(elements6.text()));
+                    getConnection2.preparedStatement.setString(7, elements6.text()); //db
                     offer.setShippingCosts(cleanHTML(elements8.text()));
+                    getConnection2.preparedStatement.setString(8, elements8.text()); //db
                     offers.add(offer);
+                    getConnection2.preparedStatement.executeUpdate(); //db
                 }
             }
         }
-
-
         return offers;
     }
 
@@ -156,17 +175,15 @@ public class Parser {
                 String tq2 = tq.replaceAll(" ", "");
                 System.out.println("Amount of extracted products: " + tq2 + " in Category " + url);
                 System.out.println("---------------------------------------------------------------------------");
+            } else {
+                elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
+                String qGoods2 = elements10.text();
+                String tq = qGoods2.replaceAll("[Produkte]", "");
+                String tq2 = tq.replaceAll(" ", "");
+                System.out.println("Amount of extracted products: " + tq2 + " in Category " + url);
+                System.out.println("---------------------------------------------------------------------------");
             }
-         else
-             {
-            elements10 = doc0.getElementsByClass("styles__productsCount--16QoZ");
-            String qGoods2 = elements10.text();
-            String tq = qGoods2.replaceAll("[Produkte]", "");
-            String tq2 = tq.replaceAll(" ", "");
-            System.out.println("Amount of extracted products: " + tq2 + " in Category " + url);
-                 System.out.println("---------------------------------------------------------------------------");
         }
-    }
         return qOfpages;
     }
 
@@ -178,8 +195,7 @@ public class Parser {
         ArrayList<String> arrayList5 = new ArrayList<>();
         arrayList5.add(getUrlSetFromSearchByPattern().toString().replaceAll("^\\[|\\]$", ""));
 
-        while (ar)
-        {
+        while (ar) {
             String newURL = arrayList5.get(arrayList5.size() - 1);
 
 
@@ -198,11 +214,11 @@ public class Parser {
             for (Element element : elements10) {
                 String url2 = element.attr("href");
 
-               // if (url2.contains("/about/brand/")) {
-                    String url3 = "https://www.aboutyou.de" + url2;
-                    arrayList5.add(url3);
+                // if (url2.contains("/about/brand/")) {
+                String url3 = "https://www.aboutyou.de" + url2;
+                arrayList5.add(url3);
 
-               // }
+                // }
             }
         }
         return arrayList5;
