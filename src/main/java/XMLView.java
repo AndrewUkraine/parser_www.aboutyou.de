@@ -15,6 +15,7 @@ public class XMLView {
             File file = new File(filePath);
             JAXBContext jaxbContext = JAXBContext.newInstance(Offers.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); /*устанавливает свойство FORMATTED_OUTPUT в TRUE. В результат будут добавлены переносы строки и пробелы, чтобы код был читабельным для человека, а не весь текст в одну строку.*/
             jaxbMarshaller.marshal(offers1, file);
         } catch (JAXBException e) {
             e.printStackTrace();
